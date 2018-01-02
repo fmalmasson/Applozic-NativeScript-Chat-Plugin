@@ -34,6 +34,14 @@ export class Common extends Observable {
     
   }
 
+  public refreshToken(token: any){
+
+  }
+
+
+  public proccessNotification(data: any){
+  }
+
 
   public logout(successCallback: any, errorCallback: any) {
     
@@ -42,6 +50,7 @@ export class Common extends Observable {
   public showAllRegisteredUsers(showAll: boolean) {
 
   }  
+
 
 }
 

@@ -6,6 +6,9 @@ declare var ALRegisterUserClientService: any;
 declare var ALPushAssist: any;
 declare var ALUserDefaultsHandler: any;
 declare var ALApplozicSettings: any;
+declare var ALPushNotificationService: any;
+
+
 
 export class ApplozicChat extends Common {
 
@@ -29,8 +32,22 @@ export class ApplozicChat extends Common {
     }
 
     public registerForPushNotification(successCallback: any, errorCallback: any){
-        
+    
     }
+
+
+  public refreshToken(token: any){
+        ALUserDefaultsHandler.setApnDeviceToken(token);              
+    }
+
+
+
+
+  public proccessNotification(data: any){
+      var alPushNotificationService  = ALPushNotificationService.alloc().init();
+        alPushNotificationService.processPushNotificationUpdateUI(data,parseInt(data.foreground));      
+  }
+
 
     public launchChat() {
         var alChatLauncher = ALChatLauncher.alloc().initWithApplicationId(ALUserDefaultsHandler.getApplicationKey());        
@@ -81,7 +98,10 @@ export class ApplozicChat extends Common {
         ALApplozicSettings.setTitleForConversationScreen("Chats");
         ALApplozicSettings.setCustomNavRightButtonMsgVC(false);                   /*  SET VISIBILITY FOR REFRESH BUTTON (COMES FROM TOP IN MSG VC)   */
         ALApplozicSettings.setTitleForBackButtonMsgVC("Back");                /*  SET BACK BUTTON FOR MSG VC  */
-        ALApplozicSettings.setTitleForBackButtonChatVC("Back");               /*  SET BACK BUTTON FOR CHAT VC */
+        ALApplozicSettings.setTitleForBackButtonChatVC("Back");   
+                    /*  SET BACK BUTTON FOR CHAT VC */
+        ALUserDefaultsHandler.setBASEURL("https://apps-test.applozic.com");              
+
         
         /****************************************************************************************************************/
         
