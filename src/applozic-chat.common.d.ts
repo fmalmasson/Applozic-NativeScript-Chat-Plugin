@@ -8,6 +8,8 @@ export declare class Common extends Observable {
     launchChat(): void;
     launchChatWithUserId(userId: any): void;
     launchChatWithGroupId(groupId: number, successCallback: any, errorCallback: any): void;
+    refreshToken(token: any): void;
+    proccessNotification(data: any): void;
     logout(successCallback: any, errorCallback: any): void;
     showAllRegisteredUsers(showAll: boolean): void;
 }
