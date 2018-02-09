@@ -18,7 +18,6 @@ export class ApplozicChat extends Common {
         alUser.password = user.password;
         alUser.applicationId = user.applicationId;
         alUser.authenticationTypeId = user.authenticationTypeId;
-        alUser.deviceApnsType = user.deviceApnsType;
 
         var alChatLauncher = ALChatLauncher.alloc().initWithApplicationId(user.applicationId);
         var alRegisterUserClientService = ALRegisterUserClientService.alloc().init();
