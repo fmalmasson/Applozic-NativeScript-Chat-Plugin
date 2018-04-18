@@ -4,7 +4,7 @@
 ## Installation
 
 ```javascript
-tns plugin add nativescript-applozic-chat  [NOT PUBLISHED YET]
+tns plugin add nativescript-applozic-chat
 ```
 Goto src folder and run 
 ```
