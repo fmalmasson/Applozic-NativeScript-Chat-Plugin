@@ -66,8 +66,19 @@ applozicChat.logout(function(response) {
       console.log("logout error: "+ error);
     });
 ```
-#### Push Notification Setup instruction
-##### Android
+## Push Notification Setup instruction
+
+### Uploading the push notification certificate  and GCM/FCM  server key in applozic dashboard 
+
+a) For IOS upload your APNS push notification certificate to Applozic Dashboard page under 'Edit Application' section in order to enable real-time notification.
+
+
+Go to [Applozic Dashboard](https://dashboard.applozic.com/) **->Action -> Edit -> Push Notification -> Upload APNS Certificate for Development and Distribution environment**.
+
+b) For Android go to [Applozic Dashboard](https://dashboard.applozic.com/) and update the GCM/FCM server key under **Action -> Edit -> Push Notification -> Android -> GCM/FCM Server Key.**
+
+
+## Android
 
 Prerequisites:
 1) Download these files <https://github.com/reytum/Applozic-Push-Notification-FIles>
@@ -108,3 +119,20 @@ Steps to follow:
        ```
        
   Note : Everytime you remove and add android platform you need to follow steps 1,2,4 and 5.
+  
+  
+## Ios
+  
+ 
+ 1) Download delegate.ts file from this **[delegate.ts link](https://drive.google.com/open?id=1sdPA0xye7GLB0mGDs2hIhXUYU3nLsvDd)** and paste it under ```your project folder-->app-->delegate.ts```
+
+ 2) Download app.ts file from the **[app.ts link](https://drive.google.com/open?id=1Q04oQgoO212i76Bv_91vWGAMsT3qng1N)** and replace the **app.ts** file in your project if you have any changes then you can merge only required changes from the **app.ts** file link 
+ 
+  
+  
+  
+  
+  
+**NOTE** : Above push notification setup for android and ios is in the case if your not using native script push plugin in your project
+  
+  
