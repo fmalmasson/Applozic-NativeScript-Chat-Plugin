@@ -15,9 +15,14 @@ export class ApplozicChat extends Common {
         user.setDisplayName(alUser.displayName);
         user.setContactNumber(alUser.contactNumber);
         user.setAuthenticationTypeId(new java.lang.Short(alUser.authenticationTypeId));
-    
+        user.setImageLink(alUser.imageLink);
+        if(alUser.pushNotificationFormat > 0){
+           user.setPushNotificationFormat(new java.lang.Short(alUser.pushNotificationFormat));
+        }else{
+           user.setPushNotificationFormat(new java.lang.Short(0));
+        }
+
         let User = com.applozic.mobicomkit.api.account.user.User;
-        let GsonUtils = com.applozic.mobicommons.json.GsonUtils;
         let RegistrationResponse = com.applozic.mobicomkit.api.account.register.RegistrationResponse;
         let context = app.android.foregroundActivity;
         let arg : java.lang.Void;
@@ -39,7 +44,7 @@ export class ApplozicChat extends Common {
                 }
                 return true;
             }
-        });  
+        });
 
         let task = new com.applozic.mobicomkit.api.account.user.UserLoginTask(user,listener,context);
         task.execute(arg);
@@ -93,7 +98,7 @@ export class ApplozicChat extends Common {
 
     public launchChatWithGroupId(groupId: number, successCallback, errorCallback) {
        let args = java.lang.Void = null;
-       let listener = new com.applozic.mobicomkit.uiwidgets.async.AlGroupInformationAsyncTask.GroupMemberListener({  
+       let listener = new com.applozic.mobicomkit.uiwidgets.async.AlGroupInformationAsyncTask.GroupMemberListener({
         onSuccess : function(response : any , context : any){
             let intent = new android.content.Intent(app.android.foregroundActivity,com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity.class);
             intent.putExtra("groupId", response.getKey().intValue());
@@ -110,7 +115,7 @@ export class ApplozicChat extends Common {
                   }
            }
         });
-       
+
      let task = new com.applozic.mobicomkit.uiwidgets.async.AlGroupInformationAsyncTask(app.android.foregroundActivity,new java.lang.Integer(groupId),listener);
      task.execute(args);
     }
