@@ -7,7 +7,6 @@ declare const android : any;
 export class ApplozicChat extends Common {
 
     public login(alUser: any, successCallback: any, errorCallback: any) {
-        console.log("Yay, plugin updated recently 10: ");
         let user = new com.applozic.mobicomkit.api.account.user.User();
         user.setUserId(alUser.userId);
         user.setPassword(alUser.password);
