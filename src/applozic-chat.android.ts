@@ -77,7 +77,6 @@ export class ApplozicChat extends Common {
             intent.putExtra(com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService.CONTEXT_BASED_CHAT,true);
         }
         app.android.foregroundActivity.startActivity(intent);
-        console.log("Yay, Called launchChat");
     }
 
     public isLoggedIn(successCallback: any, errorCallback: any){
@@ -140,6 +139,36 @@ export class ApplozicChat extends Common {
         if(showAll){
             com.applozic.mobicomkit.uiwidgets.ApplozicSetting.getInstance( app.android.foregroundActivity).enableRegisteredUsersContactCall();
         }
+    }
+
+    public createGroup(groupInfo: any, successCallback: any, errorCallback: any){
+        let channelInfo = com.applozic.mobicomkit.api.people.ChannelInfo;
+        let gsonUtils = com.applozic.mobicommons.json.GsonUtils;
+
+        channelInfo = gsonUtils.getObjectFromJson(JSON.stringify(groupInfo), channelInfo.class); //this returns object, needs to convert to ChannelInfo object
+        
+        let listener = new com.applozic.mobicomkit.uiwidgets.async.AlChannelCreateAsyncTask.TaskListenerInterface({
+            onSuccess : function(channel : any, context : any){
+                successCallback(gsonUtils.getJsonFromObject(channel, com.applozic.mobicommons.people.channel.Channel.class));
+            },
+
+            onFailure : function(response : any,context: any){
+                errorCallback(gsonUtils.getJsonFromObject(response, com.applozic.mobicomkit.feed.ChannelFeedApiResponse.class));
+            }
+        });
+        
+        new com.applozic.mobicomkit.uiwidgets.async.AlChannelCreateAsyncTask(app.android.foregroundActivity, channelInfo, listener).execute(null);
+    }
+  
+    public addContacts(contacts: any){
+        let gsonUtils = com.applozic.mobicommons.json.GsonUtils;
+        contacts.forEach(user => {
+            new com.applozic.mobicomkit.contact.AppContactService(app.android.foregroundActivity).upsert(gsonUtils.getObjectFromJson(JSON.stringify(user), com.applozic.mobicommons.people.contact.Contact.class));
+        });
+    }
+
+    public showOnlyMyContacts(){
+        com.applozic.mobicomkit.ApplozicClient.getInstance(app.android.foregroundActivity).enableShowMyContacts();
     }
 
 }
