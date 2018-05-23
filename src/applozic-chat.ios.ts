@@ -7,8 +7,18 @@ declare var ALPushAssist: any;
 declare var ALUserDefaultsHandler: any;
 declare var ALApplozicSettings: any;
 declare var ALPushNotificationService: any;
-
-
+declare var ALChannelService: any;
+declare var ALChannel: any;
+declare var NSMutableDictionary: any;
+declare var NSString: any;
+declare var NSData: any;
+declare var NSStringEncoding: any;
+declare var NSError: any;
+declare var NSJSONSerialization: any;
+declare var id: any;
+declare var ALChannel: any;
+declare var ALContactService: any;
+declare var ALContact: any;
 
 export class ApplozicChat extends Common {
 
@@ -35,19 +45,14 @@ export class ApplozicChat extends Common {
 
     }
 
-
   public refreshToken(token: any){
         ALUserDefaultsHandler.setApnDeviceToken(token);
     }
-
-
-
 
   public proccessNotification(data: any){
       var alPushNotificationService  = ALPushNotificationService.alloc().init();
         alPushNotificationService.processPushNotificationUpdateUI(data,parseInt(data.foreground));
   }
-
 
     public launchChat() {
         var alChatLauncher = ALChatLauncher.alloc().initWithApplicationId(ALUserDefaultsHandler.getApplicationKey());
@@ -80,18 +85,53 @@ export class ApplozicChat extends Common {
         });
     }
 
+    public createGroup(groupInfo: any, successCallback: any, errorCallback: any){
+    var alChannelService = ALChannelService.alloc().init();
+
+    let groupMemberList = new NSMutableArray({capacity : 0});
+    
+    alChannelService.createChannelOrClientChannelKeyAndMembersListAndImageLinkChannelTypeAndMetaDataAdminUserWithGroupUsersWithCompletion(
+                                   groupInfo.groupName,
+                                   groupInfo.clientGroupId,
+                                   groupMemberList,
+                                   groupInfo.imageUrl,
+                                   groupInfo.type,
+                                   groupInfo.metadata,
+                                   groupInfo.admin,
+                                   groupInfo.users,
+                                   function(alChannel, error) {
+                                       if(alChannel !== null){
+                                           successCallback(alChannel);
+        }else if(error !== null){
+            errorCallback(error);
+        }
+        });
+    }
+
+    public addContacts(contacts: any){
+       let alContactService = ALContactService.alloc().init();
+       contacts.forEach(user => {
+        if(user.imageUrl !== 'undefined' || user.imageUrl !== null){
+           user.contactImageUrl = user.imageUrl;
+          }
+          console.log("Reytum adding contacts : " + JSON.stringify(user));
+           let contact = ALContact.alloc().initWithDict(user);
+           alContactService.updateOrInsert(contact);
+       });
+    }
+
     public showAllRegisteredUsers(showAll: boolean) {
         ALApplozicSettings.setFilterContactsStatus(showAll);
     }
 
     public defaultSettings() {
- ALApplozicSettings.setStatusBarBGColor(UIColor.colorWithRedGreenBlueAlpha(66.0/255, 173.0/255,247.0/255,1));
+        ALApplozicSettings.setStatusBarBGColor(UIColor.colorWithRedGreenBlueAlpha(66.0/255, 173.0/255,247.0/255,1));
         /* BY DEFAULT Black:UIStatusBarStyleDefault IF REQ. White: UIStatusBarStyleLightContent  */
         /* ADD property in info.plist "View controller-based status bar appearance" type: BOOLEAN value: NO */
 
         ALApplozicSettings.setColorForNavigation(UIColor.colorWithRedGreenBlueAlpha(66.0/255,173.0/255,247.0/255 ,1));
 
-          ALApplozicSettings.setColorForNavigationItem(UIColor.whiteColor);
+        ALApplozicSettings.setColorForNavigationItem(UIColor.whiteColor);
         ALApplozicSettings.hideRefreshButton(false);
         ALUserDefaultsHandler.setNavigationRightButtonHidden(false);
         ALUserDefaultsHandler.setBottomTabBarHidden(false);
