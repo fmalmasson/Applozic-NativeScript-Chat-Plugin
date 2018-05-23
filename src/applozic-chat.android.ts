@@ -3,6 +3,7 @@ import * as app from 'tns-core-modules/application/application';
 
 declare const com : any;
 declare const android : any;
+var context = app.android.context;
 
 export class ApplozicChat extends Common {
 
@@ -23,7 +24,7 @@ export class ApplozicChat extends Common {
 
         let User = com.applozic.mobicomkit.api.account.user.User;
         let RegistrationResponse = com.applozic.mobicomkit.api.account.register.RegistrationResponse;
-        let context = app.android.foregroundActivity;
+        //let context = app.android.foregroundActivity;
         let arg : java.lang.Void;
         arg = null;
 
@@ -50,7 +51,7 @@ export class ApplozicChat extends Common {
     }
 
     public registerForPushNotification(successCallback, errorCallback){
-        let context = app.android.foregroundActivity;
+        //let context = app.android.foregroundActivity;
         let args = java.lang.Void = null;
 
         let listener = new com.applozic.mobicomkit.api.account.user.PushNotificationTask.TaskListener({
@@ -72,15 +73,16 @@ export class ApplozicChat extends Common {
     }
 
     public launchChat() {
-        let intent = new android.content.Intent(app.android.foregroundActivity,com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity.class);
-        if (com.applozic.mobicomkit.ApplozicClient.getInstance(app.android.foregroundActivity).isContextBasedChat()) {
+        let intent = new android.content.Intent(context,com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity.class);
+        if (com.applozic.mobicomkit.ApplozicClient.getInstance(context).isContextBasedChat()) {
             intent.putExtra(com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService.CONTEXT_BASED_CHAT,true);
         }
-        app.android.foregroundActivity.startActivity(intent);
+        //app.android.foregroundActivity.startActivity(intent);
+        context.startActivity(intent);
     }
 
     public isLoggedIn(successCallback: any, errorCallback: any){
-        if(com.applozic.mobicomkit.api.account.user.MobiComUserPreference.getInstance(app.android.foregroundActivity).isLoggedIn()){
+        if(com.applozic.mobicomkit.api.account.user.MobiComUserPreference.getInstance(context).isLoggedIn()){
             successCallback('true');
         }else{
             successCallback('false');
@@ -88,20 +90,20 @@ export class ApplozicChat extends Common {
     }
 
     public launchChatWithUserId(userId: any) {
-        let intent = new android.content.Intent(app.android.foregroundActivity,com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity.class);
+        let intent = new android.content.Intent(context,com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity.class);
         intent.putExtra("userId", userId);
         intent.putExtra("takeOrder",true);
-        app.android.foregroundActivity.startActivity(intent);
+        context.startActivity(intent);
     }
 
     public launchChatWithGroupId(groupId: number, successCallback, errorCallback) {
        let args = java.lang.Void = null;
        let listener = new com.applozic.mobicomkit.uiwidgets.async.AlGroupInformationAsyncTask.GroupMemberListener({
         onSuccess : function(response : any , context : any){
-            let intent = new android.content.Intent(app.android.foregroundActivity,com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity.class);
+            let intent = new android.content.Intent(context,com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity.class);
             intent.putExtra("groupId", response.getKey().intValue());
             intent.putExtra("takeOrder",true);
-            app.android.foregroundActivity.startActivity(intent);
+            context.startActivity(intent);
             successCallback(response);
            },
 
@@ -114,7 +116,7 @@ export class ApplozicChat extends Common {
            }
         });
 
-     let task = new com.applozic.mobicomkit.uiwidgets.async.AlGroupInformationAsyncTask(app.android.foregroundActivity,new java.lang.Integer(groupId),listener);
+     let task = new com.applozic.mobicomkit.uiwidgets.async.AlGroupInformationAsyncTask(context,new java.lang.Integer(groupId),listener);
      task.execute(args);
     }
 
@@ -131,13 +133,13 @@ export class ApplozicChat extends Common {
             }
         });
 
-        let task = new com.applozic.mobicomkit.api.account.user.UserLogoutTask(listener, app.android.foregroundActivity);
+        let task = new com.applozic.mobicomkit.api.account.user.UserLogoutTask(listener, context);
         task.execute(args);
     }
 
     public showAllRegisteredUsers(showAll: boolean) {
         if(showAll){
-            com.applozic.mobicomkit.uiwidgets.ApplozicSetting.getInstance( app.android.foregroundActivity).enableRegisteredUsersContactCall();
+            com.applozic.mobicomkit.uiwidgets.ApplozicSetting.getInstance(context).enableRegisteredUsersContactCall();
         }
     }
 
@@ -146,29 +148,29 @@ export class ApplozicChat extends Common {
         let gsonUtils = com.applozic.mobicommons.json.GsonUtils;
 
         channelInfo = gsonUtils.getObjectFromJson(JSON.stringify(groupInfo), channelInfo.class); //this returns object, needs to convert to ChannelInfo object
-        
+        let group = com.applozic.mobicommons.people.channel.Channel;
         let listener = new com.applozic.mobicomkit.uiwidgets.async.AlChannelCreateAsyncTask.TaskListenerInterface({
-            onSuccess : function(channel : any, context : any){
-                successCallback(gsonUtils.getJsonFromObject(channel, com.applozic.mobicommons.people.channel.Channel.class));
+            onSuccess : function(channel, context){
+                successCallback(JSON.parse(gsonUtils.getJsonFromObject(channel, group.class)));
             },
 
-            onFailure : function(response : any,context: any){
+            onFailure : function(response, context){
                 errorCallback(gsonUtils.getJsonFromObject(response, com.applozic.mobicomkit.feed.ChannelFeedApiResponse.class));
             }
         });
         
-        new com.applozic.mobicomkit.uiwidgets.async.AlChannelCreateAsyncTask(app.android.foregroundActivity, channelInfo, listener).execute(null);
+        new com.applozic.mobicomkit.uiwidgets.async.AlChannelCreateAsyncTask(context, channelInfo, listener).execute(null);
     }
   
     public addContacts(contacts: any){
         let gsonUtils = com.applozic.mobicommons.json.GsonUtils;
         contacts.forEach(user => {
-            new com.applozic.mobicomkit.contact.AppContactService(app.android.foregroundActivity).upsert(gsonUtils.getObjectFromJson(JSON.stringify(user), com.applozic.mobicommons.people.contact.Contact.class));
+            new com.applozic.mobicomkit.contact.AppContactService(context).upsert(gsonUtils.getObjectFromJson(JSON.stringify(user), com.applozic.mobicommons.people.contact.Contact.class));
         });
     }
 
     public showOnlyMyContacts(){
-        com.applozic.mobicomkit.ApplozicClient.getInstance(app.android.foregroundActivity).enableShowMyContacts();
+        com.applozic.mobicomkit.ApplozicClient.getInstance(context).enableShowMyContacts();
     }
 
 }
