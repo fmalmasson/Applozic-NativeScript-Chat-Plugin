@@ -114,7 +114,6 @@ export class ApplozicChat extends Common {
         if(user.imageUrl !== 'undefined' || user.imageUrl !== null){
            user.contactImageUrl = user.imageUrl;
           }
-          console.log("Reytum adding contacts : " + JSON.stringify(user));
            let contact = ALContact.alloc().initWithDict(user);
            alContactService.updateOrInsert(contact);
        });
