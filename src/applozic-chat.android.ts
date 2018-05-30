@@ -1,176 +1,227 @@
-import { Common } from './applozic-chat.common';
 import * as app from 'tns-core-modules/application/application';
+import { Common } from './applozic-chat.common';
 
-declare const com : any;
-declare const android : any;
-var context = app.android.context;
+declare const com: any;
+// const context = app.android.context;
 
 export class ApplozicChat extends Common {
+  constructor() {
+    super();
+  }
 
-    public login(alUser: any, successCallback: any, errorCallback: any) {
-        let user = new com.applozic.mobicomkit.api.account.user.User();
-        user.setUserId(alUser.userId);
-        user.setPassword(alUser.password);
-        user.setApplicationId(alUser.applicationId);
-        user.setDisplayName(alUser.displayName);
-        user.setContactNumber(alUser.contactNumber);
-        user.setAuthenticationTypeId(new java.lang.Short(alUser.authenticationTypeId));
-        user.setImageLink(alUser.imageLink);
-        if(alUser.pushNotificationFormat > 0){
-           user.setPushNotificationFormat(new java.lang.Short(alUser.pushNotificationFormat));
-        }else{
-           user.setPushNotificationFormat(new java.lang.Short(0));
-        }
-
-        let User = com.applozic.mobicomkit.api.account.user.User;
-        let RegistrationResponse = com.applozic.mobicomkit.api.account.register.RegistrationResponse;
-        //let context = app.android.foregroundActivity;
-        let arg : java.lang.Void;
-        arg = null;
-
-        com.applozic.mobicomkit.Applozic.init(context, alUser.applicationId);
-
-        let listener = new com.applozic.mobicomkit.api.account.user.UserLoginTask.TaskListener({
-            onSuccess : function(registrationResponse : any , context : any){
-                successCallback(registrationResponse);
-                return true;
-            },
-
-            onFailure : function(response : any, exception : any){
-                if(response === 'undefined'){
-                    errorCallback(exception);
-                }else{
-                    errorCallback(response);
-                }
-                return true;
-            }
-        });
-
-        let task = new com.applozic.mobicomkit.api.account.user.UserLoginTask(user,listener,context);
-        task.execute(arg);
+  public login(alUser: any, successCallback: any, errorCallback: any) {
+    const user = new com.applozic.mobicomkit.api.account.user.User();
+    user.setUserId(alUser.userId);
+    user.setPassword(alUser.password);
+    user.setApplicationId(alUser.applicationId);
+    user.setDisplayName(alUser.displayName);
+    user.setContactNumber(alUser.contactNumber);
+    user.setAuthenticationTypeId(new java.lang.Short(alUser.authenticationTypeId));
+    user.setImageLink(alUser.imageLink);
+    if (alUser.pushNotificationFormat > 0) {
+      user.setPushNotificationFormat(new java.lang.Short(alUser.pushNotificationFormat));
+    } else {
+      user.setPushNotificationFormat(new java.lang.Short(0));
     }
 
-    public registerForPushNotification(successCallback, errorCallback){
-        //let context = app.android.foregroundActivity;
-        let args = java.lang.Void = null;
+    const User = com.applozic.mobicomkit.api.account.user.User;
+    const RegistrationResponse = com.applozic.mobicomkit.api.account.register.RegistrationResponse;
+    let arg: java.lang.Void;
+    arg = null;
 
-        let listener = new com.applozic.mobicomkit.api.account.user.PushNotificationTask.TaskListener({
-            onSuccess : function(response : any){
-                successCallback(response);
-            },
+    const ctx = this._getAndroidContext();
+    com.applozic.mobicomkit.Applozic.init(ctx, alUser.applicationId);
 
-            onFailure : function(response : any, exception : any){
-                if(exception === 'undefined'){
-                errorCallback(response);
-            }else{
-                errorCallback(exception);
-                }
-            }
-        });
+    const listener = new com.applozic.mobicomkit.api.account.user.UserLoginTask.TaskListener({
+      onSuccess: (registrationResponse: any, context: any) => {
+        successCallback(registrationResponse);
+        return true;
+      },
 
-        let task = new com.applozic.mobicomkit.api.account.user.PushNotificationTask(com.applozic.mobicomkit.Applozic.getInstance(context).getDeviceRegistrationId(),listener,context);
-        task.execute(args);
-    }
-
-    public launchChat() {
-        let intent = new android.content.Intent(context,com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity.class);
-        if (com.applozic.mobicomkit.ApplozicClient.getInstance(context).isContextBasedChat()) {
-            intent.putExtra(com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService.CONTEXT_BASED_CHAT,true);
+      onFailure: (response: any, exception: any) => {
+        if (response === 'undefined') {
+          errorCallback(exception);
+        } else {
+          errorCallback(response);
         }
-        //app.android.foregroundActivity.startActivity(intent);
+        return true;
+      }
+    });
+
+    const task = new com.applozic.mobicomkit.api.account.user.UserLoginTask(user, listener, ctx);
+    task.execute(arg);
+  }
+
+  public registerForPushNotification(successCallback, errorCallback) {
+    const ctx = this._getAndroidContext();
+    const args = (java.lang.Void = null);
+
+    const listener = new com.applozic.mobicomkit.api.account.user.PushNotificationTask.TaskListener({
+      onSuccess: (response: any) => {
+        successCallback(response);
+      },
+
+      onFailure: (response: any, exception: any) => {
+        if (exception === 'undefined') {
+          errorCallback(response);
+        } else {
+          errorCallback(exception);
+        }
+      }
+    });
+
+    const task = new com.applozic.mobicomkit.api.account.user.PushNotificationTask(
+      com.applozic.mobicomkit.Applozic.getInstance(ctx).getDeviceRegistrationId(),
+      listener,
+      ctx
+    );
+    task.execute(args);
+  }
+
+  public launchChat() {
+    const ctx = this._getAndroidContext();
+    const intent = new android.content.Intent(
+      ctx,
+      com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity.class
+    );
+    if (com.applozic.mobicomkit.ApplozicClient.getInstance(ctx).isContextBasedChat()) {
+      intent.putExtra(com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService.CONTEXT_BASED_CHAT, true);
+    }
+    intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+    ctx.startActivity(intent);
+  }
+
+  public isLoggedIn(successCallback: any, errorCallback: any) {
+    const ctx = this._getAndroidContext();
+
+    if (com.applozic.mobicomkit.api.account.user.MobiComUserPreference.getInstance(ctx).isLoggedIn()) {
+      successCallback('true');
+    } else {
+      successCallback('false');
+    }
+  }
+
+  public launchChatWithUserId(userId: any) {
+    const ctx = this._getAndroidContext();
+
+    const intent = new android.content.Intent(
+      ctx,
+      com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity.class
+    );
+    intent.putExtra('userId', userId);
+    intent.putExtra('takeOrder', true);
+    intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+
+    ctx.startActivity(intent);
+  }
+
+  public launchChatWithGroupId(groupId: number, successCallback, errorCallback) {
+    const ctx = this._getAndroidContext();
+    const args = (java.lang.Void = null);
+    const listener = new com.applozic.mobicomkit.uiwidgets.async.AlGroupInformationAsyncTask.GroupMemberListener({
+      onSuccess: (response: any, context: any) => {
+        const intent = new android.content.Intent(
+          context,
+          com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity.class
+        );
+        intent.putExtra('groupId', response.getKey().intValue());
+        intent.putExtra('takeOrder', true);
+        intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
-    }
+        successCallback(response);
+      },
 
-    public isLoggedIn(successCallback: any, errorCallback: any){
-        if(com.applozic.mobicomkit.api.account.user.MobiComUserPreference.getInstance(context).isLoggedIn()){
-            successCallback('true');
-        }else{
-            successCallback('false');
+      onFailure: (response: any, exception: any, context: any) => {
+        if (response === 'undefined' || response === null) {
+          errorCallback('Error in launching group');
+        } else {
+          errorCallback('Error in launching group');
         }
+      }
+    });
+
+    const task = new com.applozic.mobicomkit.uiwidgets.async.AlGroupInformationAsyncTask(
+      ctx,
+      new java.lang.Integer(groupId),
+      listener
+    );
+    task.execute(args);
+  }
+
+  public logout(successCallback: any, errorCallback: any) {
+    const ctx = this._getAndroidContext();
+    const args = (java.lang.Void = null);
+
+    const listener = new com.applozic.mobicomkit.api.account.user.UserLogoutTask.TaskListener({
+      onSuccess: (context: any) => {
+        successCallback('Successfully logged out');
+      },
+
+      onFailure: (exception: any) => {
+        errorCallback('Failed to logout');
+      }
+    });
+
+    const task = new com.applozic.mobicomkit.api.account.user.UserLogoutTask(listener, ctx);
+    task.execute(args);
+  }
+
+  public showAllRegisteredUsers(showAll: boolean) {
+    if (showAll) {
+      const ctx = this._getAndroidContext();
+      com.applozic.mobicomkit.uiwidgets.ApplozicSetting.getInstance(ctx).enableRegisteredUsersContactCall();
     }
+  }
 
-    public launchChatWithUserId(userId: any) {
-        let intent = new android.content.Intent(context,com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity.class);
-        intent.putExtra("userId", userId);
-        intent.putExtra("takeOrder",true);
-        context.startActivity(intent);
+  public createGroup(groupInfo: any, successCallback: any, errorCallback: any) {
+    const ctx = this._getAndroidContext();
+    const gsonUtils = com.applozic.mobicommons.json.GsonUtils;
+    let channelInfo = com.applozic.mobicomkit.api.people.ChannelInfo;
+
+    channelInfo = gsonUtils.getObjectFromJson(JSON.stringify(groupInfo), channelInfo.class); // this returns object, needs to convert to ChannelInfo object
+
+    const group = com.applozic.mobicommons.people.channel.Channel;
+    const listener = new com.applozic.mobicomkit.uiwidgets.async.AlChannelCreateAsyncTask.TaskListenerInterface({
+      onSuccess: (channel, context) => {
+        successCallback(JSON.parse(gsonUtils.getJsonFromObject(channel, group.class)));
+      },
+
+      onFailure: (response, context) => {
+        errorCallback(gsonUtils.getJsonFromObject(response, com.applozic.mobicomkit.feed.ChannelFeedApiResponse.class));
+      }
+    });
+
+    new com.applozic.mobicomkit.uiwidgets.async.AlChannelCreateAsyncTask(ctx, channelInfo, listener).execute(null);
+  }
+
+  public addContacts(contacts: any) {
+    const ctx = this._getAndroidContext();
+
+    const gsonUtils = com.applozic.mobicommons.json.GsonUtils;
+    contacts.forEach(user => {
+      new com.applozic.mobicomkit.contact.AppContactService(ctx).upsert(
+        gsonUtils.getObjectFromJson(JSON.stringify(user), com.applozic.mobicommons.people.contact.Contact.class)
+      );
+    });
+  }
+
+  public showOnlyMyContacts() {
+    const ctx = this._getAndroidContext();
+    com.applozic.mobicomkit.ApplozicClient.getInstance(ctx).enableShowMyContacts();
+  }
+
+  /**
+   * Helper method to ensure context usage.
+   */
+  private _getAndroidContext() {
+    const ctx = app.android.context;
+    if (ctx === null) {
+      setTimeout(() => {
+        this._getAndroidContext();
+      }, 200);
+      return;
+    } else {
+      return ctx;
     }
-
-    public launchChatWithGroupId(groupId: number, successCallback, errorCallback) {
-       let args = java.lang.Void = null;
-       let listener = new com.applozic.mobicomkit.uiwidgets.async.AlGroupInformationAsyncTask.GroupMemberListener({
-        onSuccess : function(response : any , context : any){
-            let intent = new android.content.Intent(context,com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity.class);
-            intent.putExtra("groupId", response.getKey().intValue());
-            intent.putExtra("takeOrder",true);
-            context.startActivity(intent);
-            successCallback(response);
-           },
-
-           onFailure : function(response : any , exception : any, context : any){
-                  if(response === 'undefined' || response === null){
-                      errorCallback("Error in launching group");
-                  }else{
-                      errorCallback("Error in launching group");
-                  }
-           }
-        });
-
-     let task = new com.applozic.mobicomkit.uiwidgets.async.AlGroupInformationAsyncTask(context,new java.lang.Integer(groupId),listener);
-     task.execute(args);
-    }
-
-    public logout(successCallback: any, errorCallback: any) {
-        let args = java.lang.Void = null;
-
-        let listener = new com.applozic.mobicomkit.api.account.user.UserLogoutTask.TaskListener({
-            onSuccess : function(context : any){
-                successCallback("Successfully logged out");
-            },
-
-            onFailure : function(exception : any){
-                errorCallback("Failed to logout");
-            }
-        });
-
-        let task = new com.applozic.mobicomkit.api.account.user.UserLogoutTask(listener, context);
-        task.execute(args);
-    }
-
-    public showAllRegisteredUsers(showAll: boolean) {
-        if(showAll){
-            com.applozic.mobicomkit.uiwidgets.ApplozicSetting.getInstance(context).enableRegisteredUsersContactCall();
-        }
-    }
-
-    public createGroup(groupInfo: any, successCallback: any, errorCallback: any){
-        let channelInfo = com.applozic.mobicomkit.api.people.ChannelInfo;
-        let gsonUtils = com.applozic.mobicommons.json.GsonUtils;
-
-        channelInfo = gsonUtils.getObjectFromJson(JSON.stringify(groupInfo), channelInfo.class); //this returns object, needs to convert to ChannelInfo object
-        let group = com.applozic.mobicommons.people.channel.Channel;
-        let listener = new com.applozic.mobicomkit.uiwidgets.async.AlChannelCreateAsyncTask.TaskListenerInterface({
-            onSuccess : function(channel, context){
-                successCallback(JSON.parse(gsonUtils.getJsonFromObject(channel, group.class)));
-            },
-
-            onFailure : function(response, context){
-                errorCallback(gsonUtils.getJsonFromObject(response, com.applozic.mobicomkit.feed.ChannelFeedApiResponse.class));
-            }
-        });
-        
-        new com.applozic.mobicomkit.uiwidgets.async.AlChannelCreateAsyncTask(context, channelInfo, listener).execute(null);
-    }
-  
-    public addContacts(contacts: any){
-        let gsonUtils = com.applozic.mobicommons.json.GsonUtils;
-        contacts.forEach(user => {
-            new com.applozic.mobicomkit.contact.AppContactService(context).upsert(gsonUtils.getObjectFromJson(JSON.stringify(user), com.applozic.mobicommons.people.contact.Contact.class));
-        });
-    }
-
-    public showOnlyMyContacts(){
-        com.applozic.mobicomkit.ApplozicClient.getInstance(context).enableShowMyContacts();
-    }
-
+  }
 }
