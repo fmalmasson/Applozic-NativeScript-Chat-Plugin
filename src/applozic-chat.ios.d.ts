@@ -8,6 +8,8 @@ export declare class ApplozicChat extends Common {
     launchChatWithUserId(userId: any): void;
     launchChatWithGroupId(groupId: number, successCallback: any, errorCallback: any): void;
     logout(successCallback: any, errorCallback: any): void;
+    createGroup(groupInfo: any, successCallback: any, errorCallback: any): void;
+    addContacts(contacts: any): void;
     showAllRegisteredUsers(showAll: boolean): void;
     defaultSettings(): void;
 }

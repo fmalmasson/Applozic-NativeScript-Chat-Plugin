@@ -3,7 +3,7 @@ import * as app from 'tns-core-modules/application/application';
 
 declare const com : any;
 declare const android : any;
-var context = app.android.context;
+var context = app.android.foregroundActivity;
 
 export class ApplozicChat extends Common {
 

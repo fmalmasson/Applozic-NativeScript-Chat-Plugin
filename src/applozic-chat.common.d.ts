@@ -12,6 +12,9 @@ export declare class Common extends Observable {
     proccessNotification(data: any): void;
     logout(successCallback: any, errorCallback: any): void;
     showAllRegisteredUsers(showAll: boolean): void;
+    createGroup(groupInfo: any, successCallback: any, errorCallback: any): void;
+    addContacts(contacts: any, successCallback: any, errorCallback: any): void;
+    showOnlyMyContacts(): void;
 }
 export declare class Utils {
     static SUCCESS_MSG(): string;
