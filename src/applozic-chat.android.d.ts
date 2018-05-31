@@ -13,4 +13,3 @@ export declare class ApplozicChat extends Common {
     addContacts(contacts: any): void;
     showOnlyMyContacts(): void;
     private _getAndroidContext();
-}

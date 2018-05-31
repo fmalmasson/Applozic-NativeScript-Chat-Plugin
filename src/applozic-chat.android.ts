@@ -2,7 +2,6 @@ import * as app from 'tns-core-modules/application/application';
 import { Common } from './applozic-chat.common';
 
 declare const com: any;
-// const context = app.android.context;
 
 export class ApplozicChat extends Common {
   constructor() {
