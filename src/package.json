@@ -1,6 +1,6 @@
 {
   "name": "nativescript-applozic-chat",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Nativescript plugin from Applozic that wraps the Native chat UI for android and iOS",
   "main": "applozic-chat",
   "typings": "index.d.ts",
@@ -16,23 +16,25 @@
     "build": "npm i && tsc && npm run build.native",
     "build.native": "node scripts/build-native.js",
     "postclone": "npm i && node scripts/postclone.js && cd ../demo && npm i && cd ../src && npm run plugin.link",
-    "test.android":
-      "npm i && npm run tsc && npm run tslint && cd ../demo && tns build android && tns test android --justlaunch",
+    "test.android": "npm i && npm run tsc && npm run tslint && cd ../demo && tns build android && tns test android --justlaunch",
     "test.ios": "npm i && npm run tsc && npm run tslint && cd ../demo && tns build ios && tns test ios --justlaunch",
     "plugin.link": "npm link && cd ../demo && npm link nativescript-applozic-chat && cd ../src",
     "plugin.tscwatch": "npm run tsc -- -w",
     "demo.ios": "npm i && npm run tsc && cd ../demo && tns run ios --syncAllFiles",
     "demo.android": "npm i && npm run tsc && cd ../demo && tns run android --syncAllFiles",
     "demo.reset": "cd ../demo && rimraf platforms",
-    "plugin.prepare":
-      "npm run tsc && cd ../demo && tns plugin remove nativescript-applozic-chat && tns plugin add ../src",
-    "clean":
-      "cd ../demo && rimraf hooks node_modules platforms && cd ../src && rimraf node_modules && npm run plugin.link",
+    "plugin.prepare": "npm run tsc && cd ../demo && tns plugin remove nativescript-applozic-chat && tns plugin add ../src",
+    "clean": "cd ../demo && rimraf hooks node_modules platforms && cd ../src && rimraf node_modules && npm run plugin.link",
     "ci.tslint": "npm i && tslint '**/*.ts' --config '../tslint.json' --exclude '**/node_modules/**'",
     "tslint": "tslint --config './tslint.json' 'app/**/*.ts' --exclude '**/node_modules/**'",
     "prepack": "npm run build.native"
   },
-  "keywords": ["NativeScript", "JavaScript", "Android", "iOS"],
+  "keywords": [
+    "NativeScript",
+    "JavaScript",
+    "Android",
+    "iOS"
+  ],
   "author": {
     "name": "Your Name",
     "email": "youremail@yourdomain.com"
@@ -58,6 +60,10 @@
   "dependencies": {},
   "bootstrapper": "nativescript-plugin-seed",
   "lint-staged": {
-    "*.{ts, js, json, scss, md}": ["tslint", "prettier --write", "git add"]
+    "*.{ts, js, json, scss, md}": [
+      "tslint",
+      "prettier --write",
+      "git add"
+    ]
   }
 }

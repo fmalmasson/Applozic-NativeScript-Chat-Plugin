@@ -78,7 +78,7 @@ export class ApplozicChat extends Common {
   }
 
   public launchChat() {
-    const ctx = this._getAndroidContext();
+    const ctx = this._getCurrentActivity();
     const intent = new android.content.Intent(
       ctx,
       com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity.class
@@ -86,7 +86,6 @@ export class ApplozicChat extends Common {
     if (com.applozic.mobicomkit.ApplozicClient.getInstance(ctx).isContextBasedChat()) {
       intent.putExtra(com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService.CONTEXT_BASED_CHAT, true);
     }
-    intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
     ctx.startActivity(intent);
   }
 
@@ -101,7 +100,7 @@ export class ApplozicChat extends Common {
   }
 
   public launchChatWithUserId(userId: any) {
-    const ctx = this._getAndroidContext();
+    const ctx = this._getCurrentActivity();
 
     const intent = new android.content.Intent(
       ctx,
@@ -109,24 +108,23 @@ export class ApplozicChat extends Common {
     );
     intent.putExtra('userId', userId);
     intent.putExtra('takeOrder', true);
-    intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
 
     ctx.startActivity(intent);
   }
 
   public launchChatWithGroupId(groupId: number, successCallback, errorCallback) {
     const ctx = this._getAndroidContext();
+    const activity = this._getCurrentActivity();
     const args = (java.lang.Void = null);
     const listener = new com.applozic.mobicomkit.uiwidgets.async.AlGroupInformationAsyncTask.GroupMemberListener({
       onSuccess: (response: any, context: any) => {
         const intent = new android.content.Intent(
-          context,
+          activity,
           com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity.class
         );
         intent.putExtra('groupId', response.getKey().intValue());
         intent.putExtra('takeOrder', true);
-        intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+        activity.startActivity(intent);
         successCallback(response);
       },
 
@@ -217,6 +215,18 @@ export class ApplozicChat extends Common {
     if (ctx === null) {
       setTimeout(() => {
         this._getAndroidContext();
+      }, 200);
+      return;
+    } else {
+      return ctx;
+    }
+  }
+
+  private _getCurrentActivity() {
+    const ctx = app.android.foregroundActivity;
+    if (ctx === null) {
+      setTimeout(() => {
+        this._getCurrentActivity();
       }, 200);
       return;
     } else {
