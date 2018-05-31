@@ -16,6 +16,3 @@ export declare class Common extends Observable {
     addContacts(contacts: any, successCallback: any, errorCallback: any): void;
     showOnlyMyContacts(): void;
 }
-export declare class Utils {
-    static SUCCESS_MSG(): string;
-}

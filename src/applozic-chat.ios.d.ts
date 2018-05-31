@@ -1,5 +1,6 @@
 import { Common } from './applozic-chat.common';
 export declare class ApplozicChat extends Common {
+    constructor();
     login(user: any, successCallback: any, errorCallback: any): void;
     registerForPushNotification(successCallback: any, errorCallback: any): void;
     refreshToken(token: any): void;

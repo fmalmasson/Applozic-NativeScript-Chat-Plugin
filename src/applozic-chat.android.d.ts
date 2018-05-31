@@ -1,5 +1,6 @@
 import { Common } from './applozic-chat.common';
 export declare class ApplozicChat extends Common {
+    constructor();
     login(alUser: any, successCallback: any, errorCallback: any): void;
     registerForPushNotification(successCallback: any, errorCallback: any): void;
     launchChat(): void;
@@ -11,4 +12,4 @@ export declare class ApplozicChat extends Common {
     createGroup(groupInfo: any, successCallback: any, errorCallback: any): void;
     addContacts(contacts: any): void;
     showOnlyMyContacts(): void;
-}
+    private _getAndroidContext();
