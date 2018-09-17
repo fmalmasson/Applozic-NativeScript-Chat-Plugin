@@ -1,1 +1,1 @@
-pod 'Applozic', :git => 'https://github.com/AppLozic/Applozic-Chat-iOS-Framework.git', :branch => 'nativeScript'
+pod 'Applozic', '~> 6.1.0'
