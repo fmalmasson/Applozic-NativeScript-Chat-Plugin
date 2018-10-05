@@ -23,6 +23,10 @@ export class ApplozicChat extends Common {
       user.setPushNotificationFormat(new java.lang.Short(0));
     }
 
+    if (alUser.enableEncryption !== undefined) {
+      user.setEnableEncryption(alUser.enableEncryption);
+    }
+
     const User = com.applozic.mobicomkit.api.account.user.User;
     const RegistrationResponse = com.applozic.mobicomkit.api.account.register.RegistrationResponse;
     let arg: java.lang.Void;

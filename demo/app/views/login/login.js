@@ -21,7 +21,8 @@ exports.login = function() {
       'password' : password,  //Put password here
       'authenticationTypeId' : 1,
       'applicationId' :  applicationKey,  //replace "applozic-sample-app" with Application Key from Applozic Dashboard
-      'deviceApnsType' : 0    //Set 0 for Development and 1 for Distribution (Release)
+      'deviceApnsType' : 0 ,   //Set 0 for Development and 1 for Distribution (Release)
+      'enableEncryption' : false // Set true for encryption. Default is False
     };
     
     applozicChat.login(alUser, function(response) {
