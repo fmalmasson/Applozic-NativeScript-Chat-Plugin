@@ -26,6 +26,10 @@ export class ApplozicChat extends Common {
     alUser.authenticationTypeId = user.authenticationTypeId;
     alUser.imageLink = user.imageLink;
 
+    if (user.enableEncryption !== undefined) {
+      ALUserDefaultsHandler.setEnableEncryption(user.enableEncryption);
+    }
+
     const alChatLauncher = ALChatLauncher.alloc().initWithApplicationId(user.applicationId);
     const alRegisterUserClientService = ALRegisterUserClientService.alloc().init();
 
