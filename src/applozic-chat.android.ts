@@ -38,10 +38,10 @@ export class ApplozicChat extends Common {
       },
 
       onFailure: (response: any, exception: any) => {
-        if (response === 'undefined') {
-          errorCallback(exception);
-        } else {
+        if (response) {
           errorCallback(response);
+        } else {
+          errorCallback(exception);
         }
         return true;
       }
@@ -61,7 +61,7 @@ export class ApplozicChat extends Common {
       },
 
       onFailure: (response: any, exception: any) => {
-        if (exception === 'undefined') {
+        if (response) {
           errorCallback(response);
         } else {
           errorCallback(exception);
@@ -74,6 +74,28 @@ export class ApplozicChat extends Common {
       listener,
       ctx
     );
+    task.execute(args);
+  }
+
+  public refreshToken(token: any, successCallback, errorCallback) {
+    const ctx = this._getAndroidContext();
+    const args = (java.lang.Void = null);
+
+    const listener = new com.applozic.mobicomkit.api.account.user.PushNotificationTask.TaskListener({
+      onSuccess: (response: any) => {
+        successCallback(response);
+      },
+
+      onFailure: (response: any, exception: any) => {
+        if (response) {
+          errorCallback(response);
+        } else {
+          errorCallback(exception);
+        }
+      }
+    });
+
+    const task = new com.applozic.mobicomkit.api.account.user.PushNotificationTask(token, listener, ctx);
     task.execute(args);
   }
 
@@ -145,6 +167,13 @@ export class ApplozicChat extends Common {
     task.execute(args);
   }
 
+  public proccessNotification(data: any) {
+    const ctx = this._getAndroidContext();
+    const gsonUtils = com.applozic.mobicommons.json.GsonUtils;
+    const dataMap = gsonUtils.getObjectFromJson(data, java.util.HashMap.class);
+    com.applozic.mobicomkit.api.notification.MobiComPushReceiver.processMessageAsync(ctx, dataMap);
+  }
+
   public logout(successCallback: any, errorCallback: any) {
     const ctx = this._getAndroidContext();
     const args = (java.lang.Void = null);
@@ -180,7 +209,7 @@ export class ApplozicChat extends Common {
     const group = com.applozic.mobicommons.people.channel.Channel;
     const listener = new com.applozic.mobicomkit.uiwidgets.async.AlChannelCreateAsyncTask.TaskListenerInterface({
       onSuccess: (channel, context) => {
-        successCallback(JSON.parse(gsonUtils.getJsonFromObject(channel, group.class)));
+        successCallback(gsonUtils.getJsonFromObject(channel, group.class));
       },
 
       onFailure: (response, context) => {

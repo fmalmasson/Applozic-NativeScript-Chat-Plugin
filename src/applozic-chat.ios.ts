@@ -32,14 +32,29 @@ export class ApplozicChat extends Common {
     alRegisterUserClientService.initWithCompletionWithCompletion(alUser, (response, error) => {
       // Todo: add check for error and call errorCallback in case of error
       this.defaultSettings();
-      successCallback(response);
+      if (response) {
+        if (response.isRegisteredSuccessfully()) {
+          successCallback(response.dictionary());
+        } else {
+          errorCallback(response.dictionary());
+        }
+      } else {
+        errorCallback(JSON.stringify(error));
+      }
     });
   }
 
   public registerForPushNotification(successCallback: any, errorCallback: any) {}
 
-  public refreshToken(token: any) {
-    ALUserDefaultsHandler.setApnDeviceToken(token);
+  public refreshToken(token: any, successCallback: any, errorCallback: any) {
+    const alRegisterUserClientService = ALRegisterUserClientService.alloc().init();
+    alRegisterUserClientService.updateApnDeviceTokenWithCompletionwithCompletion(token, (response, error) => {
+      if (response) {
+        successCallback(response.dictionary());
+      } else {
+        errorCallback(JSON.stringify(error));
+      }
+    });
   }
 
   public proccessNotification(data: any) {
@@ -82,7 +97,7 @@ export class ApplozicChat extends Common {
     alRegisterUserClientService.logoutWithCompletionHandler((response, error) => {
       if (!error && response.status === 'success') {
         console.log('Logout successful');
-        successCallback(response);
+        successCallback(response.dictionary());
       } else {
         console.log('Logout failed: ' + response.response);
         successCallback(error);
@@ -106,7 +121,7 @@ export class ApplozicChat extends Common {
       groupInfo.users,
       (alChannel, error) => {
         if (alChannel !== null) {
-          successCallback(alChannel);
+          successCallback(alChannel.dictionary());
         } else if (error !== null) {
           errorCallback(error);
         }

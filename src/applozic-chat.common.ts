@@ -19,7 +19,7 @@ export class Common extends Observable {
 
   public launchChatWithGroupId(groupId: number, successCallback: any, errorCallback: any) {}
 
-  public refreshToken(token: any) {}
+  public refreshToken(token: any, successCallback: any, errorCallback: any) {}
 
   public proccessNotification(data: any) {}
 
