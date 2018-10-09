@@ -52,7 +52,7 @@ export class ApplozicChat extends Common {
 
   public refreshToken(token: any, successCallback: any, errorCallback: any) {
     const alRegisterUserClientService = ALRegisterUserClientService.alloc().init();
-    alRegisterUserClientService.updateApnDeviceTokenWithCompletionwithCompletion(token, (response, error) => {
+    alRegisterUserClientService.updateApnDeviceTokenWithCompletionWithCompletion(token, (response, error) => {
       if (response) {
         successCallback(response.dictionary());
       } else {
