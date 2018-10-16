@@ -197,8 +197,8 @@ export class ApplozicChat extends Common {
   }
 
   public showAllRegisteredUsers(showAll: boolean) {
+    const ctx = this._getAndroidContext();
     if (showAll) {
-      const ctx = this._getAndroidContext();
       com.applozic.mobicomkit.uiwidgets.ApplozicSetting.getInstance(ctx).enableRegisteredUsersContactCall();
     }
   }
@@ -235,9 +235,13 @@ export class ApplozicChat extends Common {
     });
   }
 
-  public showOnlyMyContacts() {
+  public showOnlyMyContacts(show: boolean) {
     const ctx = this._getAndroidContext();
-    com.applozic.mobicomkit.ApplozicClient.getInstance(ctx).enableShowMyContacts();
+    if (show) {
+      com.applozic.mobicomkit.ApplozicClient.getInstance(ctx).enableShowMyContacts();
+    } else {
+      com.applozic.mobicomkit.ApplozicClient.getInstance(ctx).disableShowMyContacts();
+    }
   }
 
   /**

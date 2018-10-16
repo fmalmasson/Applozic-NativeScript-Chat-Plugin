@@ -140,12 +140,24 @@ export class ApplozicChat extends Common {
         user.contactImageUrl = user.imageUrl;
       }
       const contact = ALContact.alloc().initWithDict(user);
+      if (user.hasOwnProperty('contactType')) {
+        contact.contactType = user.contactType;
+      }
       alContactService.updateOrInsert(contact);
     });
   }
 
   public showAllRegisteredUsers(showAll: boolean) {
     ALApplozicSettings.setFilterContactsStatus(showAll);
+  }
+
+  public showOnlyMyContacts(show: boolean) {
+    ALApplozicSettings.setFilterContactsStatus(false);
+    if (show) {
+      ALApplozicSettings.setContactTypeToFilter([1]);
+    } else {
+      ALApplozicSettings.setContactTypeToFilter(null);
+    }
   }
 
   public defaultSettings() {

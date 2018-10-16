@@ -30,5 +30,6 @@ export class Common extends Observable {
   public createGroup(groupInfo: any, successCallback: any, errorCallback: any) {}
 
   public addContacts(contacts: any, successCallback: any, errorCallback: any) {}
-  public showOnlyMyContacts() {}
+
+  public showOnlyMyContacts(show: boolean) {}
 }
