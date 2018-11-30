@@ -48,6 +48,14 @@ export class ApplozicChat extends Common {
     });
   }
 
+  public isLoggedIn(successCallback: any, errorCallback: any) {
+    if (ALUserDefaultsHandler.isLoggedIn()) {
+      successCallback('true');
+    } else {
+      successCallback('false');
+    }
+  }
+
   public registerForPushNotification(successCallback: any, errorCallback: any) {}
 
   public refreshToken(token: any, successCallback: any, errorCallback: any) {
