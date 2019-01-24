@@ -181,7 +181,7 @@ export class ApplozicChat extends Common {
     ALApplozicSettings.hideRefreshButton(false);
     ALUserDefaultsHandler.setNavigationRightButtonHidden(false);
     ALUserDefaultsHandler.setBottomTabBarHidden(false);
-    ALApplozicSettings.setTitleForConversationScreen('Chats');
+    ALApplozicSettings.setTitleForConversationScreen('Messagerie');
     ALApplozicSettings.setCustomNavRightButtonMsgVC(
       false
     ); /*  SET VISIBILITY FOR REFRESH BUTTON (COMES FROM TOP IN MSG VC)   */
