@@ -1,5 +1,5 @@
 {
-  "name": "nativescript-applozic-chat",
+  "name": "nativescript-applozic-chat-fm",
   "version": "1.2.3",
   "description": "Nativescript plugin from Applozic that wraps the Native chat UI for android and iOS",
   "main": "applozic-chat",
